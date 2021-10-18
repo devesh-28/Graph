@@ -1,0 +1,41 @@
+ // this function is made for checking if there is an unconected graph
+ public static void bfs(ArrayList<ArrayList<Integer>>adj,int v)
+    {
+        // boolean visted to keep in check the number of times a vertex in visited 
+        boolean visited[]=new boolean[v+1];
+        for(int i=0;i<v;i++)
+        {
+            visited[i]=false;
+        }
+        //for checking if the vertex visited and if it is false
+        for (int i=0;i<v;i++)
+        {
+         if(visited[i]==false)
+         // a function to call the main bfs function
+             bfsmain(adj,i,visited);
+        }
+    }
+    //main bfs
+    public static void bfsmain(ArrayList<ArrayList<Integer>>adj,int s,boolean []visited)
+    {
+     // in bfs we use queue as it stores an element in queue then search for its adjacent 
+        Queue<Integer>q=new LinkedList<>();
+        //make visted as true to indicated that this vertex in visited 
+        visited[s]=true;
+        q.add(s);
+        //to check if the queue is empty or not
+        while(q.size()!=0)
+        {
+            int u=q.poll();
+            System.out.println(u);
+            //for checking adjacent of the vertex thats been taken out by poll function
+            for (int v:adj.get(u))
+            {
+                if(visited[v]==false)
+                {
+                    visited[v]=true;
+                    q.add(v);
+                }
+            }
+        }
+    }
