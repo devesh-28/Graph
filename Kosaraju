@@ -1,0 +1,102 @@
+import java.util.*;
+
+public class kosaraju {
+    private int V;
+    private ArrayList<ArrayList<Integer>>adj;
+    kosaraju(int v){
+        V=v;
+        adj=new ArrayList<ArrayList<Integer>>(v);
+        for (int i=0;i<v;i++)
+        {
+            adj.add(new ArrayList<Integer>());
+        }
+    }
+    void addEdge(int v, int w)  { adj.get(v).add(w); }
+
+    void printSsc() {
+       Stack<Integer> s = new Stack<>();
+       boolean visited[] = new boolean[V];
+       for (int i = 0; i < V; i++) {
+           visited[i] = false;
+       }
+       for (int i = 0; i < V; i++) {
+           if (visited[i] == false) {
+               dfs1(adj, visited, i, s);
+           }
+       }
+       kosaraju gr=gettranspose();
+        for (int i = 0; i < V; i++)
+            visited[i] = false;
+        while (s.empty()==false)
+        {
+            // Pop a vertex from stack
+            int v = (int)s.pop();
+
+            // Print Strongly connected component of the popped vertex
+            if (visited[v] == false)
+            {
+                gr.DFSUtil(v, visited);
+                System.out.println();
+            }
+        }
+   }
+    void DFSUtil(int v,boolean visited[])
+    {
+        // Mark the current node as visited and print it
+        visited[v] = true;
+        System.out.print(v + " ");
+
+        int n;
+
+        // Recur for all the vertices adjacent to this vertex
+        Iterator<Integer> i =adj.get(v).iterator();
+        while (i.hasNext())
+        {
+            n = i.next();
+            if (!visited[n])
+                DFSUtil(n,visited);
+        }
+    }
+    void dfs1( ArrayList<ArrayList<Integer>>adj,boolean []visited,int v,Stack s)
+    {
+        visited[v]=true;
+        for (int u: adj.get(v))
+        {
+            if(visited[u]==false)
+            {
+                dfs1(adj,visited,u,s);
+            }
+        }
+        s.push(v);
+    }
+    kosaraju gettranspose()
+    {
+        kosaraju g =new kosaraju(V);
+        // m is taken for vertex number
+        for (int m=0;m<V;m++)
+        {
+        // helps in finding the adjacent of m then adding those adjacent to m 
+            Iterator<Integer> n= adj.get(m).listIterator();
+            while (n.hasNext())
+                g.adj.get(n.next()).add(m);
+        }
+        return g;
+    }
+
+    public static void main(String args[])
+    {
+        // Create a graph given in the above diagram
+        kosaraju g = new kosaraju(5);
+        g.addEdge(1, 0);
+        g.addEdge(0, 2);
+        g.addEdge(2, 1);
+        g.addEdge(0, 3);
+        g.addEdge(3, 4);
+
+        System.out.println("Following are strongly connected components "+
+                "in given graph ");
+        g.printSsc();
+    }
+
+
+}
